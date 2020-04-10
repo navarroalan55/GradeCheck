@@ -51,7 +51,7 @@ class Log(Frame):
                 gradebook.click()
 
                 student_pic = driver.find_element_by_css_selector('img.img').get_attribute('src')
-                print(student_pic)
+
 
                 list_course = driver.find_elements_by_css_selector('td.finedetail')
                 lists = [n.text for n in list_course]
@@ -59,9 +59,7 @@ class Log(Frame):
                 s_class = [n.split("\n")[0] for n in new_list[::3]]
                 s_grades = [n.split("/")[0] for n in new_list[1::3]]
                 s_teacher = new_list[2::3]
-                print(s_class,s_grades, s_teacher)
-                Grade.__init__(self).tree.insert()
-
+                Grade().insert(s_class, s_grades, s_teacher, student_pic)
 
 
             except selenium.common.exceptions.NoSuchElementException:
@@ -73,6 +71,7 @@ class Log(Frame):
             t_code.delete(0, 'end')
             t_user.delete(0, 'end')
             t_pass.delete(0, 'end')
+            Grade.clear()
 
         Frame.__init__(self, *args, **kwargs)
         self.name = name
@@ -114,7 +113,6 @@ class Log(Frame):
 
 
 class Grade(Frame):
-
     def __init__(self, *args, **kwargs):
         Frame.__init__(self, *args, **kwargs)
         self.f_grade = Frame(self)
@@ -135,6 +133,15 @@ class Grade(Frame):
         f_user.place(height=100, width=450)
 
         self.f_grades.place(y=100, height=350, width=450)
+
+    def insert(self, s_class, s_grades, s_teacher, student_pic):
+        # iterate over the number of classes and insert info
+        self.tree.insert('', 'end', text=s_class[0])
+        # add pic to f_user
+
+    def clear(self):
+        # destroy inserts of tree and pic
+        pass
 
 
 my_app = App()
